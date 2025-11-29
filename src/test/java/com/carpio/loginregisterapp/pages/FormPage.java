@@ -65,7 +65,6 @@ public class FormPage {
         Select select = new Select(paymentMethod);
         select.selectByVisibleText(payment);
         datepicker.sendKeys(date);
-        submitButton.click();
     }
     public void enviar() {
         wait.until(ExpectedConditions.elementToBeClickable(submitButton)).click();

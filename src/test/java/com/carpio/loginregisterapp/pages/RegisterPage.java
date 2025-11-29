@@ -15,7 +15,7 @@ public class RegisterPage {
 
     private final WebDriverWait webDriverWait;
 
-    private final String url = "https://practice.expandtesting.com/login";
+    private final String url = "https://practice.expandtesting.com/register";
 
     private final By usernameInput = By.id("username");
 
@@ -34,29 +34,30 @@ public class RegisterPage {
 
     public void open() {
         webDriver.get(url);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(usernameInput));
     }
 
     public void register(String username, String password, String confirmPassword) {
         WebElement button = webDriver.findElement(registerButton);
-        WebElement usernameInputElement = webDriver.findElement(usernameInput);
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
         js.executeScript("arguments[0].scrollIntoView(true);", button);
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(usernameInputElement));
 
-        try{
-            webDriver.findElement(usernameInput).sendKeys(username);
-            Thread.sleep(1000);
-            webDriver.findElement(passwordInput).sendKeys(password);
-            Thread.sleep(1000);
-            webDriver.findElement(confirmPasswordInput).sendKeys(confirmPassword);
-            Thread.sleep(1000);
-            button.click();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        WebElement userEl = webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(usernameInput));
+        userEl.clear();
+        userEl.sendKeys(username);
+
+        WebElement passEl = webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput));
+        passEl.clear();
+        passEl.sendKeys(password);
+
+        WebElement confirmEl = webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(confirmPasswordInput));
+        confirmEl.clear();
+        confirmEl.sendKeys(confirmPassword);
+
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(button)).click();
     }
 
     public String getMessage() {
-        return webDriver.findElement(message).getText();
+        return webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(message)).getText().trim();
     }
 }
